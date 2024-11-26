@@ -113,6 +113,7 @@ addLayer("sl", {
             ],
         },
         "The Limbo Page": {
+            unlocked() { return isEndgame() },
             content: [
                 ["clickable", 11],
                 ["row", [["clickable", 14], ["clickable", 13], ["clickable", 12]]],
@@ -200,6 +201,9 @@ addLayer("sl", {
                     "background-size": "115% 100%",
                 }
             },
+            unlocked() {
+                return hasUpgrade('e',25)
+            }
         },
         14: {
             title: "Resonant Whispers",
@@ -222,6 +226,9 @@ addLayer("sl", {
                     "background-size": "115% 100%",
                 }
             },
+            unlocked() {
+                return hasUpgrade('e',25)
+            }
         },
         15: {
             title: "Restoration",
@@ -237,6 +244,9 @@ addLayer("sl", {
                     "background-size": "115% 100%",
                 }
             },
+            unlocked() {
+                return hasUpgrade('e',25)
+            }
         },
     },
     buyables: {
@@ -1703,7 +1713,7 @@ addLayer("e", {
         25: {
             title: "Upgrades of Light",
             description: "Unlock 3 Shards of Light upgrades.<br>(Also keep this upgrade on reset)",
-            cost: new Decimal("1ee1000"),
+            cost: new Decimal("1e50"),
             style(){
                 return {
                     "background": 
