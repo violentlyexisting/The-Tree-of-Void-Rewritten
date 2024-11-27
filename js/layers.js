@@ -113,7 +113,7 @@ addLayer("sl", {
             ],
         },
         "The Limbo Page": {
-            unlocked() { return isEndgame() },
+            unlocked() { return isEndgame() || player.skibidisigma },
             content: [
                 ["clickable", 11],
                 ["row", [["clickable", 14], ["clickable", 13], ["clickable", 12]]],
@@ -508,6 +508,7 @@ addLayer("ef", {
         best: new Decimal(0),
         total: new Decimal(0),
         bestOnReset: new Decimal(0),
+        spentpoints: new Decimal(0),
         resetTime: 0,
     }},
     color: "#6B8E23",
@@ -607,6 +608,9 @@ addLayer("ef", {
             description: "Point gain is ^1.05 (and THAT is a huge boost)",
             cost() {
                 return hasUpgrade('ef',12)&&!hasMilestone('sl',1)?new Decimal(10):new Decimal(1)
+            },
+            onPurchase() {
+                player.ef.spentpoints = player.ef.spentpoints.add(tmp.ef.upgrades[this.id].cost)
             }
         },
         12:{
@@ -615,13 +619,19 @@ addLayer("ef", {
             cost() {
                 return hasUpgrade('ef',11)&&!hasMilestone('sl',1)?new Decimal(10):new Decimal(1)
             },
-            effectDisplay: "1.99x"
+            effectDisplay: "1.99x",
+            onPurchase() {
+                player.ef.spentpoints = player.ef.spentpoints.add(tmp.ef.upgrades[this.id].cost)
+            }
         },
         13: {
             title: "Echoic Exchange I",
             description: "Point gain is divided by 10.00, but SL gain is 25.00x",
             cost() {
                 return hasUpgrade('ef',14)?new Decimal(50):new Decimal(3)
+            },
+            onPurchase() {
+                player.ef.spentpoints = player.ef.spentpoints.add(tmp.ef.upgrades[this.id].cost)
             }
         },
         14: {
@@ -629,6 +639,9 @@ addLayer("ef", {
             description: "Point gain is 10.00x, but SL gain is divided by 25.00",
             cost() {
                 return hasUpgrade('ef',13)?new Decimal(50):new Decimal(3)
+            },
+            onPurchase() {
+                player.ef.spentpoints = player.ef.spentpoints.add(tmp.ef.upgrades[this.id].cost)
             }
         },
         15: {
@@ -637,7 +650,8 @@ addLayer("ef", {
             cost: new Decimal(500),
             onPurchase() {
                 doReset('ef', true)
-            }
+                player.ef.spentpoints = player.ef.spentpoints.add(tmp.ef.upgrades[this.id].cost)
+            },
         }
     },
     clickables: {
@@ -650,6 +664,8 @@ addLayer("ef", {
             onClick() {
                 doReset('ef', true)
                 player.ef.upgrades = []
+                player.ef.points = player.ef.points.add(player.ef.spentpoints)
+                player.ef.spentpoints = new Decimal(0)
             }
         }
     },
