@@ -12,14 +12,19 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.0",
-	name: "The Release :D",
+	num: "1.1",
+	name: "small balancing fix",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<h3>v1.0</h3><br>
 		- Added everything up until Row 3.<br>
-		- idk tbh.`
+		- idk tbh.<br><br>
+	<h3>v1.1</h3><br>
+		- Reduced EW costs and milestones.<br>
+		- EF respec now also refunds.<br>
+		- Also added EE milestone 2.<br>
+		- Also, yeah.<br>`
 
 let winText = `:toot: now wait until the dev isnt lazy or procrastinating her homework and updates the tree`
 

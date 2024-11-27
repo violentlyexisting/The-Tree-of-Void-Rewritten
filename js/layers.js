@@ -935,7 +935,7 @@ addLayer("ew", {
             description() {
                 return (player.ew.unlockOrder > 0?"This layer acts as if you chose EW first, also e":"E") + "choic whispers boost themselves."
             },
-            cost: new Decimal("5e8"),
+            cost: new Decimal("4e7"),
             effect() {
                 let x = player.ew.points.add(1).log(5).pow(2.1).add(1)
                 return x
@@ -953,7 +953,7 @@ addLayer("ew", {
         21: {
             title: "I Ran Out Of Ideas",
             description: "There's a reduced multiplier floor for the decaying point bonus",
-            cost: new Decimal(1e11),
+            cost: new Decimal("5e8"),
             unlocked() {
                 return getBuyableAmount('sl',11).gte(5)||hasUpgrade('ew',11)
             },
@@ -970,7 +970,7 @@ addLayer("ew", {
         22: {
             title: "Wait I Have An Idea",
             description: "EF milestone 2 is ^4.00",
-            cost: new Decimal("2e11"),
+            cost: new Decimal("1e9"),
             unlocked() {
                 return getBuyableAmount('sl',11).gte(5)||hasUpgrade('ew',11)
             }
@@ -978,7 +978,7 @@ addLayer("ew", {
         23: {
             title: "Fading Screams",
             description: "Fading Whisper amount is boosted by points",
-            cost: new Decimal("3e13"),
+            cost: new Decimal("2e11"),
             unlocked() {
                 return getBuyableAmount('sl',11).gte(5)||hasUpgrade('ew',11)
             },
@@ -999,7 +999,7 @@ addLayer("ew", {
         24: {
             title: "Light Surge",
             description: "SL gain is also boosted by Fading Whispers.",
-            cost: new Decimal("1e21"),
+            cost: new Decimal("1e15"),
             effectDisplay() {
                 return format(tmp.ew.effect.sl) + "x"
             },
@@ -1024,10 +1024,10 @@ addLayer("ew", {
             }
         },
         2: {
-            requirementDescription: "1.00e32 echoic whispers",
+            requirementDescription: "1.00e17 echoic whispers",
             effectDescription: "&quot;Retribution&quot; is no longer required to be kept on reset on Row 3.",
             done() {
-                return player.ew.total.gte(1e32)
+                return player.ew.total.gte(1e17)
             }
         },
         3: {
@@ -1458,6 +1458,7 @@ addLayer("e", {
     startData() { return {
         unlocked: false,
 		points: new Decimal(0),
+        auto: false,
     }},
     color: "#4BDC13",
     requires: new Decimal("1e155"), // Can be a function that takes requirement increases into account
@@ -1513,7 +1514,7 @@ addLayer("e", {
             cost: new Decimal(1),
             effect() {
                 let x = player.e.points.add(1).log(50).pow(5).add(1)
-                let xs = x.root(8).min(120)
+                let xs = x.root(7.8).min(player.e.points.log10())
                 x = x.min("1e5")
                 x.gte("1e5")?x=x.mul(xs):x
                 return x
@@ -1702,7 +1703,7 @@ addLayer("e", {
             }
         },
         24: {
-            title: "Recursive Growth",
+            title: "Recursive Idle",
             description: "Time spent on Equilibrium reset boosts tree growth.",
             cost: new Decimal("1e48"),
             effect() {
@@ -1751,6 +1752,8 @@ addLayer("e", {
         }
         let kept = [];
         hasUpgrade('e',15)?kept = kept.concat(15):kept
+        hasUpgrade('e',25)?kept = kept.concat(25):kept
+        player.e.auto?kept=kept.concat(...player.e.upgrades):keep
         resettingLayer === "e"?player.e.upgrades = kept:player.e.upgrades;
     },
     milestones: {
@@ -1760,6 +1763,16 @@ addLayer("e", {
             done() {
                 return player.e.best.gte(1000)
             }
-        }
+        },
+        1: {
+            requirementDescription: "500,000 equilibrium essence",
+            effectDescription: "You can keep Equilibrium upgrades on reset.",
+            done() {
+                return player.e.best.gte(5e5)
+            },
+            toggles: [
+                ["e","auto"]
+            ]
+        },
     },
 })
